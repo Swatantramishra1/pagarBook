@@ -6,18 +6,10 @@ export const expenseManagerSlice = createSlice({
       data : {
         totalPaid: 0,
         totalRecieve: 0,
-        "list": {
-            "20-10-12": [
-                {
-                    "transaction-type": "paid | recieve",
-                    "name":"",
-                    "discription": "",
-                    "amount": 0,
-                    "date": "",
-                    id: ""
-                }
-            ]
-        }
+        list: {}
+      },
+      others: {
+        showModal: false
       }
   },
   reducers: {
@@ -37,13 +29,20 @@ export const expenseManagerSlice = createSlice({
 
     updateExpenses: (state,action) => {
         state.data =  action.payload
-    }
+    },
+
+    updateExpensesList: (state,action) => {
+        state.data.list =  action.payload
+    },
+    updateModalStatus: (state,action) => {
+      state.others.showModal =  action.payload
+  }
   },
 });
 
 // ,increment, decrement, incrementByAmount
 
-export const { updateExpenses } = expenseManagerSlice.actions;
+export const { updateExpenses,updateExpensesList, updateModalStatus } = expenseManagerSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -71,6 +70,11 @@ export const selectTotalExpenses = state => {
 export const selectListData = state => {
     return state.expense.data.list;
 };
+
+export const selectModalStatus = state => {
+  return state.expense.others.showModal;
+};
+
 
 
 export default expenseManagerSlice.reducer;

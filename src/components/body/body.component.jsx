@@ -4,24 +4,31 @@ import { NoEntryComponent } from "./no-entry/no.entry.component"
 import { Modal } from 'react-responsive-modal';
 import "react-responsive-modal/styles.css";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTotalExpenses, updateExpenses } from "../data/expenseManagerSlice";
+import { selectListData, selectModalStatus, selectTotalExpenses, updateExpenses, updateModalStatus } from "../data/expenseManagerSlice";
+import { ListComponent } from "./list/list.component";
 
 
 export const BodyComponent = () => {
 
-    const [open, setOpen] = useState(false);
     const [paid, setPaid] = useState(false);
     const [recieve, setRecieve] = useState(false);
     const [name, setName] = useState("");
     const [amount, setAmount] = useState(0);
     const [discription, setDisc] = useState("");
     const [date, setDate] = useState("");
+    const [date, setDate] = useState("");
+
+    const [showList, setShowList] = useState(false);
+
 
     const dispatch = useDispatch();
     const expenses = useSelector(selectTotalExpenses);
+    const selectList = useSelector(selectListData);
+    const selectModalCurrentStatus = useSelector(selectModalStatus);
  
-    const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        dispatch(updateModalStatus(false))
+    }
 
     const onSetPaid = () => {
         setPaid(!paid);
@@ -52,6 +59,16 @@ export const BodyComponent = () => {
     }
 
 
+    function setInitialState() {
+        setPaid(false);
+        setRecieve(false);
+        setAmount(0);
+        setName("");
+        setDisc("");
+        setDate("")
+    }
+
+
     const onSave = () => {
         let amountData = 0;
         if(paid) {
@@ -63,11 +80,9 @@ export const BodyComponent = () => {
         const data = {
             totalPaid: paid ? amountData : expenses.paid,
             totalRecieve: recieve ? amountData : expenses.recieve,
-            list: {}
           }
 
-
-
+          const listData = JSON.parse(JSON.stringify(selectList));
           const randomId = Math.random() + "d";
           const dataObj =  {
             "transaction-type": paid ? "paid" : "recieve",
@@ -78,20 +93,24 @@ export const BodyComponent = () => {
             id: randomId
         };
         
-        if(data.list && data.list.hasOwnProperty(date)) {
-            data.list[date].push(
+        if(listData && listData.hasOwnProperty(date)) {
+            listData[date].push(
                 dataObj
             )
         } else {
-            data.list[date] = [dataObj]
+            listData[date] ={};
+            listData[date] = [dataObj]
         }
         
 
-        console.log(data)
+        data.list = listData;
 
         dispatch(updateExpenses(data))
         onCloseModal();
+        setInitialState();
+        setShowList(true)
     }
+
 
 
 
@@ -102,11 +121,10 @@ export const BodyComponent = () => {
     return(
         <div className="body">
         <ExpenseManagerComponent></ExpenseManagerComponent>
-        <NoEntryComponent></NoEntryComponent>
         
-        <button onClick={onOpenModal}>Open modal</button>
-
-        <Modal open={open} onClose={onCloseModal} center>
+        {showList ? <ListComponent></ListComponent> : <NoEntryComponent></NoEntryComponent>}
+        <Modal open={selectModalCurrentStatus} onClose={onCloseModal} center>
+            <div className="formContainer">
                 <div className="input">
                  <div className="label">Transaction Type</div>
                     <div className="checkbox">
@@ -124,7 +142,7 @@ export const BodyComponent = () => {
 
                 <div className="input">
                  <div className="label">Amount</div>
-                 <input type="text" id="amount" name="amount" value={amount} onChange={(e) => onChangeAmountInput(e)} />
+                 <input type="number" id="amount" name="amount" value={amount} onChange={(e) => onChangeAmountInput(e)} />
                 </div>   
 
                 <div className="input">
@@ -140,6 +158,8 @@ export const BodyComponent = () => {
                 <div className="action">
                     <button onClick={onSave}>Save</button>
                     <button onClick={onCloseModal}>Cancel</button>
+                </div>
+
                 </div>
         </Modal>
         </div>
