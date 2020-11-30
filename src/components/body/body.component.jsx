@@ -16,7 +16,6 @@ export const BodyComponent = () => {
     const [amount, setAmount] = useState(0);
     const [discription, setDisc] = useState("");
     const [date, setDate] = useState("");
-    const [date, setDate] = useState("");
 
     const [showList, setShowList] = useState(false);
 
