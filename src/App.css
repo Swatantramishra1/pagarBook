@@ -92,11 +92,68 @@ body {
 }
 
 .box-item {
-  display: flex;
+  display: grid;
   background-color: #fafafa;
   justify-content: space-between;
   padding: 8px 16px;
   border-radius: 4px;
+  grid-template-columns: 200px 200px 200px 200px;
+  border-bottom: 1px solid white;
+}
+
+.box-item:last-child {
+  border-bottom: none;
+}
+
+.react-responsive-modal-modal {
+  width: 310px;
+  border-radius: 4px;
+}
+
+.checkbox-container {
+  display: inline-grid;
+  grid-column-gap: 20px;
+  grid-template-columns: auto auto;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
+  margin-bottom: 16px;
+}
+
+.label {
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #5a5a5a;
+}
+
+.action {
+  display: grid;
+  grid-template-columns: 60px 60px;
+  column-gap: 16px;
+}
+
+button {
+  display: block;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: white;
+  color: #0066fd;
+  border: 1px solid #0066fd;
+  cursor: pointer;
+}
+
+.save {
+  background-color: #858585;
+  color: white;
+  border: none;
 }
 
 .btnAddEntry {
@@ -109,6 +166,29 @@ body {
   cursor: pointer;
 }
 
-.react-responsive-modal-modal {
-  width: 600px;
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  display: block;
+  border: none;
+  border: 1px solid #858585;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+span {
+  overflow-wrap: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #3a3a3a;
+  font-size: 14px;
+}
+
+.error {
+  padding: 0 0 16px 12px;
+  color: red;
+  font-size: 12px;
+  width: 194px;
+  display: flex;
 }
